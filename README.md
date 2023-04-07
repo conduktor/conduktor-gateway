@@ -134,8 +134,8 @@ bootstrap.servers=localhost:9092
 ### Kafka Connection Configurations
 ```yaml
 kafkaSelector:
-  file:
-    path:  - the path to the file containing Kafka connection properties e.g. config/kafka.config
+  type: file
+  path:  - the path to the file containing Kafka connection properties e.g. config/kafka.config
 ```
 
 ### Host/Port Configurations
@@ -150,9 +150,6 @@ hostPortConfiguration:
 ```yaml
 authenticationConfig:
   authenticatorType: - the authentication type for client <--> gateway e.g. NONE
-  exponentialBackoff:
-    multiplier: - backoff multiplier for failed authentication attempts e.g. 2
-    backoffMaxMs: - maximum backoff time e.g. 5000
   sslConfig:
     updateContextIntervalMinutes: - the interval to check for for SSL context changes e.g. 5
     keyStore:
