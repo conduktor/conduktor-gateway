@@ -117,7 +117,7 @@
     <scm>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>https://github.com/conduktor/conduktor-gateway-interceptors.git</url>
+        <url>https://github.com/conduktor/conduktor-gateway.git</url>
         <tag>HEAD</tag>
     </scm>
 
