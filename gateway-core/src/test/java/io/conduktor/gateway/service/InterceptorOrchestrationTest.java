@@ -1,9 +1,6 @@
 package io.conduktor.gateway.service;
 
-import io.conduktor.gateway.interceptor.DirectionType;
-import io.conduktor.gateway.interceptor.Interceptor;
-import io.conduktor.gateway.interceptor.InterceptorContext;
-import io.conduktor.gateway.interceptor.InterceptorValue;
+import io.conduktor.gateway.interceptor.*;
 import io.conduktor.gateway.model.InterceptContext;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.kafka.common.message.FetchResponseData;
@@ -76,7 +73,7 @@ public class InterceptorOrchestrationTest {
     public static class InterceptorTest implements Interceptor<FetchResponse> {
 
         @Override
-        public CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext) {
+        public CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
             var afterTenSecs = delayedExecutor(1000, TimeUnit.MILLISECONDS);
             return CompletableFuture.supplyAsync(() -> "someValue", afterTenSecs)
                     .thenApply(rs -> input);

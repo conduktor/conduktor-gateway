@@ -17,6 +17,7 @@ package io.conduktor.example.loggerinterceptor;
 
 import io.conduktor.gateway.interceptor.Interceptor;
 import io.conduktor.gateway.interceptor.InterceptorContext;
+import io.conduktor.gateway.interceptor.InterceptorTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.FetchRequest;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.CompletionStage;
 @Slf4j
 public class FetchRequestLoggerInterceptor implements Interceptor<FetchRequest> {
     @Override
-    public CompletionStage<FetchRequest> intercept(FetchRequest input, InterceptorContext interceptorContext) {
+    public CompletionStage<FetchRequest> intercept(FetchRequest input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
         var source = interceptorContext.clientAddress().getHostName();
         log.warn("Fetch was requested from {}", source);
         interceptorContext.inFlightInfo().put("source", source);

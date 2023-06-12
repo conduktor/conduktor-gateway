@@ -17,6 +17,7 @@ package io.conduktor.example.loggerinterceptor;
 
 import io.conduktor.gateway.interceptor.Interceptor;
 import io.conduktor.gateway.interceptor.InterceptorContext;
+import io.conduktor.gateway.interceptor.InterceptorTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.AbstractRequestResponse;
 
@@ -31,8 +32,10 @@ public class AllLoggerInterceptor implements Interceptor<AbstractRequestResponse
     public AllLoggerInterceptor(String prefix) {
         this.prefix = prefix;
     }
+
+
     @Override
-    public CompletionStage<AbstractRequestResponse> intercept(AbstractRequestResponse input, InterceptorContext interceptorContext) {
+    public CompletionStage<AbstractRequestResponse> intercept(AbstractRequestResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
         log.warn("{}, a {} was sent/received", prefix, input.getClass());
         return CompletableFuture.completedFuture(input);
     }

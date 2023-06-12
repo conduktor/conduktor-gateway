@@ -15,9 +15,7 @@
 
 package io.conduktor.gateway.service;
 
-import io.conduktor.gateway.interceptor.DirectionType;
-import io.conduktor.gateway.interceptor.InterceptorContext;
-import io.conduktor.gateway.interceptor.InterceptorValue;
+import io.conduktor.gateway.interceptor.*;
 import io.conduktor.gateway.model.InterceptContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.AbstractRequestResponse;
@@ -26,6 +24,7 @@ import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -73,10 +72,11 @@ public class InterceptorOrchestration {
                                                                AbstractRequestResponse input) {
         return interceptorValue.interceptor()
                 .intercept(input, new InterceptorContext(
-                        interceptContext.getDirectionType(),
-                        interceptContext.getClientRequest().getGatewayRequestHeader(),
-                        (Map<String, Object>) interceptContext.getClientRequest().getInflightInfo(),
-                        interceptContext.getClientRequest().getClientChannel().remoteAddress()))
+                                interceptContext.getDirectionType(),
+                                interceptContext.getClientRequest().getGatewayRequestHeader(),
+                                (Map<String, Object>) interceptContext.getClientRequest().getInflightInfo(),
+                                interceptContext.getClientRequest().getClientChannel().remoteAddress()),
+                        null)
                 .toCompletableFuture()
                 .orTimeout(interceptorValue.timeoutMs(), TimeUnit.MILLISECONDS);
     }

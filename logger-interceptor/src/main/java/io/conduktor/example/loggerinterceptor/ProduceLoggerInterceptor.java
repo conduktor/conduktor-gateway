@@ -17,6 +17,7 @@ package io.conduktor.example.loggerinterceptor;
 
 import io.conduktor.gateway.interceptor.Interceptor;
 import io.conduktor.gateway.interceptor.InterceptorContext;
+import io.conduktor.gateway.interceptor.InterceptorTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.ProduceRequest;
 
@@ -26,7 +27,7 @@ import java.util.concurrent.CompletionStage;
 @Slf4j
 public class ProduceLoggerInterceptor implements Interceptor<ProduceRequest> {
     @Override
-    public CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext) {
+    public CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
         var version = interceptorContext.requestHeader().apiVersion();
         log.warn("Produce was called with version: {}", version);
 

@@ -15,12 +15,13 @@
 
 package io.conduktor.gateway.interceptor;
 
-import org.apache.kafka.common.requests.AbstractRequestResponse;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.concurrent.CompletionStage;
+@Getter
+public class InterceptorTools {
 
-@FunctionalInterface
-public interface Interceptor<INOUT extends AbstractRequestResponse> {
+    private final InterceptorLog interceptorLog = new InterceptorLog();
 
-    CompletionStage<INOUT> intercept(INOUT input, InterceptorContext interceptorContext, InterceptorTools interceptorTools);
 }

@@ -15,10 +15,7 @@
 
 package io.conduktor.gateway.integration.interceptor;
 
-import io.conduktor.gateway.interceptor.Interceptor;
-import io.conduktor.gateway.interceptor.InterceptorContext;
-import io.conduktor.gateway.interceptor.InterceptorProvider;
-import io.conduktor.gateway.interceptor.Plugin;
+import io.conduktor.gateway.interceptor.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.AbstractRequestResponse;
 import org.apache.kafka.common.requests.FetchRequest;
@@ -54,7 +51,7 @@ public class TestInterceptorPlugin implements Plugin {
             this.prefix = prefix;
         }
         @Override
-        public CompletionStage<AbstractRequestResponse> intercept(AbstractRequestResponse input, InterceptorContext interceptorContext) {
+        public CompletionStage<AbstractRequestResponse> intercept(AbstractRequestResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
             log.warn("{}, a {} was sent/received", prefix, input.getClass());
             return CompletableFuture.completedFuture(input);
         }
@@ -64,7 +61,7 @@ public class TestInterceptorPlugin implements Plugin {
     @Slf4j
     public static class FetchRequestLoggerInterceptor implements Interceptor<FetchRequest> {
         @Override
-        public CompletionStage<FetchRequest> intercept(FetchRequest input, InterceptorContext interceptorContext) {
+        public CompletionStage<FetchRequest> intercept(FetchRequest input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
             var source = interceptorContext.clientAddress().getHostName();
             log.warn("Fetch was requested from {}", source);
             interceptorContext.inFlightInfo().put("source", source);
@@ -75,7 +72,7 @@ public class TestInterceptorPlugin implements Plugin {
     @Slf4j
     public static class FetchResponseLoggerInterceptor implements Interceptor<FetchResponse> {
         @Override
-        public CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext) {
+        public CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
             log.warn("Fetch from client {} was responded to", interceptorContext.inFlightInfo().get("source"));
             return CompletableFuture.completedFuture(input);
         }

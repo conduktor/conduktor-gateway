@@ -18,6 +18,7 @@ package io.conduktor.example.loggerinterceptor;
 import io.conduktor.gateway.interceptor.DirectionType;
 import io.conduktor.gateway.interceptor.Interceptor;
 import io.conduktor.gateway.interceptor.InterceptorContext;
+import io.conduktor.gateway.interceptor.InterceptorTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.requests.AbstractResponse;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.CompletionStage;
 @Slf4j
 public class ResponseLoggerInterceptor implements Interceptor<AbstractResponse> {
     @Override
-    public CompletionStage<AbstractResponse> intercept(AbstractResponse input, InterceptorContext interceptorContext) {
+    public CompletionStage<AbstractResponse> intercept(AbstractResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
         log.warn("A {} was sent", DirectionType.RESPONSE);
         return CompletableFuture.completedFuture(input);
     }

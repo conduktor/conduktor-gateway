@@ -49,7 +49,7 @@ The Interceptor framework jar file contains the `Interceptor.java` implementatio
 The `Interceptor.java` interface defines the API that is used to intercept a Kafka Request or Response:
 
 ```java
-CompletionStage<T> intercept(T input, InterceptorContext interceptorContext) {
+CompletionStage<T> intercept(T input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {
    //Interceptor code here
 }
 ```
@@ -73,7 +73,7 @@ The next section describes how to determine what to use for `<T>`:
 To intercept a specific request or response, specify the exact type of the request or response in the method declaration. For example
 
 ```java
-CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext)`
+CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools)`
 ```
 
 **Important:** Only specify one instance of the intercept method in each implementation class.
@@ -81,21 +81,21 @@ CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext
 It is not valid to have more than one intercept method, this will result in only one of the interceptor methods being run when Kafka API flows are processed.  The following example is not valid:
 
 ```java
-CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext) { }
-CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext) { }
+CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) { }
+CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) { }
 ```
 
 Instead, make two separate Java class files that each implement the `Interceptor.java` interface, specifying their own type. For the above example create both
 
 ```java
 public class FetchLoggerInterceptor implements Interceptor<FetchResponse> {
-   CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext) {}
+   CompletionStage<FetchResponse> intercept(FetchResponse input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {}
 }
 ```
 and
 ```java
 public class ProduceLoggerInterceptor implements Interceptor<ProduceRequest> {
-   CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext) {}
+   CompletionStage<ProduceRequest> intercept(ProduceRequest input, InterceptorContext interceptorContext, InterceptorTools interceptorTools) {}
 }
 ```
 Then use `Plugin` to provide both implementations to the Gateway to register it for use:
